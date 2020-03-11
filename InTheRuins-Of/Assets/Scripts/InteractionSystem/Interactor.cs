@@ -46,14 +46,14 @@ namespace InteractionSystem {
     protected Interactable interactable;
     protected Interaction interaction;
 
-    void Update() {
+    void LateUpdate() {
       // If an interaction is happening
       if (interaction) {
         // Maybe the interaction was ended somewhere else?
         if (interaction.ended) {
           interaction = null;
           // Recall Update so new interactions can be immediately recognized
-          Update();
+          LateUpdate();
           return;
         }
         if (type == Type.Toggle ? Input.GetKeyDown(key) : !Input.GetKey(key) || !Complies(interaction)) {

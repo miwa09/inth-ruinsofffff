@@ -6,8 +6,6 @@ using UnityEditor;
 #endif
 
 public class Controller : MonoBehaviour {
-  //Urg that's ugly, maybe find a better way
-  public static Controller Instance { get; protected set; }
 
   public Camera cam;
 
@@ -17,7 +15,7 @@ public class Controller : MonoBehaviour {
   public float JumpSpeed = 5;
 
 
-  float verticalSpeed = 0.0f;
+  float verticalSpeed;
   bool paused = false;
 
   float verAngle, playerAngle;
@@ -27,29 +25,18 @@ public class Controller : MonoBehaviour {
   public bool lockControl;
   public bool canPause = true;
 
-  public bool Grounded => grounded;
+  public bool grounded { get; private set; } = true;
 
-  CharacterController charCtrlr;
+  private CharacterController charCtrlr;
 
-  bool grounded;
-  float m_GroundedTimer;
-  float speedAtJump = 0.0f;
-
-  void Awake() {
-    Instance = this;
-  }
+  private float timeGrounded;
+  private float speedAtJump;
 
   void Start() {
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
-
-    paused = false;
-    grounded = true;
-
     charCtrlr = GetComponent<CharacterController>();
 
-
-    verAngle = 0.0f;
     playerAngle = transform.localEulerAngles.y;
   }
 
@@ -62,14 +49,14 @@ public class Controller : MonoBehaviour {
     //if the character controller reported not being grounded for at least .5 second;
     if (!charCtrlr.isGrounded) {
       if (grounded) {
-        m_GroundedTimer += Time.deltaTime;
-        if (m_GroundedTimer >= 0.5f) {
+        timeGrounded += Time.deltaTime;
+        if (timeGrounded >= 0.5f) {
           loosedGrounding = true;
           grounded = false;
         }
       }
     } else {
-      m_GroundedTimer = 0.0f;
+      timeGrounded = 0;
       grounded = true;
     }
 
@@ -92,7 +79,7 @@ public class Controller : MonoBehaviour {
 
       // Move around with WASD
       move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-      if (move.sqrMagnitude > 1.0f)
+      if (move.sqrMagnitude > 1)
         move.Normalize();
 
       var usedSpeed = grounded ? actualSpeed : speedAtJump;
@@ -106,8 +93,8 @@ public class Controller : MonoBehaviour {
       var playerRotation = Input.GetAxis("Mouse X") * sensitivity;
       playerAngle = playerAngle + playerRotation;
 
-      if (playerAngle > 360) playerAngle -= 360.0f;
-      if (playerAngle < 0) playerAngle += 360.0f;
+      if (playerAngle > 360) playerAngle -= 360;
+      if (playerAngle < 0) playerAngle += 360;
 
       var angles = transform.localEulerAngles;
       angles.y = playerAngle;
@@ -140,9 +127,9 @@ public class Controller : MonoBehaviour {
     }
 
     // Fall down / gravity
-    verticalSpeed = verticalSpeed - 10.0f * Time.deltaTime;
-    if (verticalSpeed < -10.0f)
-      verticalSpeed = -10.0f; // max fall speed
+    verticalSpeed = verticalSpeed - 10 * Time.deltaTime;
+    if (verticalSpeed < -10)
+      verticalSpeed = -10; // max fall speed
     var verticalMove = new Vector3(0, verticalSpeed * Time.deltaTime, 0);
     var flag = charCtrlr.Move(verticalMove);
     if ((flag & CollisionFlags.Below) != 0)

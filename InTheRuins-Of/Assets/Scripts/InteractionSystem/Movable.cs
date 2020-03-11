@@ -70,15 +70,15 @@ namespace InteractionSystem {
 
         var overlaps = Physics.OverlapBox(bounds.center, bounds.extents);
 
-        var removes = new List<Collider>();
+        var unignored = new List<Collider>();
         foreach (var associate in associates) {
           if (!overlaps.Contains(associate)) {
             Physics.IgnoreCollision(rb.GetComponent<Collider>(), associate, false);
-            removes.Add(associate);
+            unignored.Add(associate);
           }
         }
 
-        associates.RemoveAll(e => removes.Contains(e));
+        associates.RemoveAll(e => unignored.Contains(e));
       }
     }
 
@@ -104,7 +104,7 @@ namespace InteractionSystem {
     public void OnActive(Interaction inter) {
       samples.Add(new Sample(transform.position, Time.deltaTime));
       var targetPos = inter.sourcePos + (inter.dir.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
-      var dir = (targetPos - transform.position);
+      var dir = targetPos - transform.position;
       var dirNorm = dir.normalized;
 
       if (rb.SweepTest(dirNorm, out var _, dir.magnitude)) {
