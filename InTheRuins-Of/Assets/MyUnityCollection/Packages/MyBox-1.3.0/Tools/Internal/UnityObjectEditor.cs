@@ -9,8 +9,10 @@ namespace MyBox.Internal {
     private ButtonMethodHandler _buttonMethod;
 
     private void OnEnable() {
-      _foldout = new FoldoutAttributeHandler(target, serializedObject);
-      _buttonMethod = new ButtonMethodHandler(target);
+      try {
+        _foldout = new FoldoutAttributeHandler(target, serializedObject);
+        _buttonMethod = new ButtonMethodHandler(target);
+      } catch { }
     }
 
     private void OnDisable() {

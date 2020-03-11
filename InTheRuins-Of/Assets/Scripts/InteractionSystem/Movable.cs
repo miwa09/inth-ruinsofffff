@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
-using MyBox;
+using System.Linq;
 
 namespace InteractionSystem {
   [RequireComponent(typeof(Rigidbody))]
@@ -17,15 +17,15 @@ namespace InteractionSystem {
 
     [
       Tooltip("Keep distance from the " + nameof(Interactor) + " within this range (from 0 to maximum interaction distance)"),
-      MinMaxRange(0, 1)
+      MyBox.MinMaxRange(0, 1)
     ]
-    public FloatRange distanceRange = new FloatRange(0, 1);
+    public MyBox.FloatRange distanceRange = new MyBox.FloatRange(0, 1);
 
     [Tooltip("Move " + nameof(Interactable) + " to the center of the " + nameof(Interactor) + "'s ray")]
     public bool restrictCenter;
 
-    [Tooltip("Multiplier of movement towards desired point")]
-    public float moveVelocityWhenColliding = 20;
+    [Tooltip("Maximum force towards target movement position when colliding")]
+    public float dragForce = 20;
 
     [Tooltip("Enable collision when no longer colliding with the " + nameof(Interactor) + " instead of immediately")]
     public bool waitCollisionEnd = true;
@@ -46,12 +46,14 @@ namespace InteractionSystem {
     private Interaction interaction;
     private float targetDistance;
     private bool usedGravity;
-    private List<Collider> awaitingCols = new List<Collider>();
+    private Vector3 prevPos;
+    private List<Collider> associates = new List<Collider>();
 
     void OnValidate() {
       sampleCount = math.max(3, sampleCount);
       samples = new CircularBuffer<Sample>(sampleCount);
     }
+
 
     void Start() {
       OnValidate();
@@ -60,21 +62,23 @@ namespace InteractionSystem {
       interactable.AddActivationEventListeners(OnActivate, OnActive, OnDeactive);
     }
 
-    void Update() {
-      if (waitCollisionEnd && awaitingCols.Count > 0) {
-        var col = GetComponent<Collider>();
+    void FixedUpdate() {
+      if (associates.Count > 0) {
+        Collider[] cols = rb.GetComponentsInChildren<Collider>();
+        Bounds bounds = new Bounds(transform.position, Vector3.zero);
+        foreach (Collider nextCollider in cols) bounds.Encapsulate(nextCollider.bounds);
 
-        // We must unignore before sweeping or we dont hit the colliders
-        foreach (var awaitCol in awaitingCols) Physics.IgnoreCollision(col, awaitCol, false);
-        var cols = rb.SweepTestAll(Vector3.forward, 0).Map(hit => hit.collider);
-        foreach (var awaitCol in awaitingCols) Physics.IgnoreCollision(col, awaitCol, true);
+        var overlaps = Physics.OverlapBox(bounds.center, bounds.extents);
 
-        foreach (var awaitingCol in awaitingCols) {
-          if (cols.IndexOfItem(awaitingCol) == -1) {
-            Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider, false);
-            awaitingCols.Remove(awaitingCol);
+        var removes = new List<Collider>();
+        foreach (var associate in associates) {
+          if (!overlaps.Contains(associate)) {
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), associate, false);
+            removes.Add(associate);
           }
         }
+
+        associates.RemoveAll(e => removes.Contains(e));
       }
     }
 
@@ -82,8 +86,11 @@ namespace InteractionSystem {
       if (interaction && !interaction.ended) inter.End();
       interaction = inter;
       usedGravity = rb.useGravity;
-      if (inter.source.associatedCollider)
-        Physics.IgnoreCollision(rb.GetComponent<Collider>(), interaction.source.associatedCollider);
+      var associate = inter.source.associatedCollider;
+      if (associate) {
+        Physics.IgnoreCollision(rb.GetComponent<Collider>(), associate);
+        associates.RemoveAll(e => e == associate);
+      }
       rb.useGravity = false;
       var maxDir = inter.dir.SetLen(inter.source.maxDistance);
       Line line = new Line(
@@ -92,27 +99,28 @@ namespace InteractionSystem {
       );
       var closestPoint = line.ClampToLine(inter.targetPos);
       targetDistance = Vector3.Distance(inter.sourcePos, closestPoint);
-      samples.Clear();
     }
 
     public void OnActive(Interaction inter) {
       samples.Add(new Sample(transform.position, Time.deltaTime));
       var targetPos = inter.sourcePos + (inter.dir.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
-      var dir = targetPos - transform.position;
-      if (rb.SweepTest(dir.normalized, out var hit, dir.magnitude * 1.1f)) {
-        rb.velocity = dir * moveVelocityWhenColliding;
+      var dir = (targetPos - transform.position);
+      var dirNorm = dir.normalized;
+
+      if (rb.SweepTest(dirNorm, out var _, dir.magnitude)) {
+        rb.AddForce(dirNorm * dragForce, ForceMode.Force);
       } else {
         rb.velocity = Vector3.zero;
-        rb.MovePosition(targetPos);
+        transform.position = targetPos;
       }
     }
 
     public void OnDeactive(Interaction inter) {
       rb.useGravity = usedGravity;
-      var assCol = interaction.source.associatedCollider;
-      if (assCol && waitCollisionEnd) {
-        if (!awaitingCols.Contains(assCol)) awaitingCols.Add(assCol);
-      }
+      if (waitCollisionEnd && inter.source.associatedCollider)
+        associates.Add(interaction.source.associatedCollider);
+
+      // Transfer velocity >>>
       var count = 0;
       Sample merged = new Sample(Vector3.zero, 0);
       foreach (var sample in samples) {
@@ -131,6 +139,8 @@ namespace InteractionSystem {
       } else {
         rb.velocity = Vector3.zero;
       }
+      samples.Clear();
+      // <<<
     }
   }
 }

@@ -31,6 +31,7 @@ public class CircularBuffer<T> : IEnumerable<T> {
     data[++head] = item;
   }
 
+  /// <summary> Set all elements to default value of element type </summary>
   internal void Clear() {
     for (int i = 0; i < data.Length; i++) {
       data[i] = default(T);

@@ -138,11 +138,6 @@ namespace MyBox {
     /// var nextItem = myArray[i];
     /// </summary>
     public static int NextIndexInCircle<T>(this T[] array, int desiredPosition) {
-      if (array.IsNullOrEmpty()) {
-        Debug.LogError("NextIndexInCircle Caused: source array is null or empty");
-        return -1;
-      }
-
       if (array.Length == 0) return 0;
       if (desiredPosition < 0) return array.Length - 1;
       if (desiredPosition > array.Length - 1) return 0;
@@ -154,11 +149,6 @@ namespace MyBox {
     /// Returns -1 if none found
     /// </returns>
     public static int IndexOfItem<T>(this IEnumerable<T> collection, T item) {
-      if (collection.IsNullOrEmpty()) {
-        Debug.LogError("NextIndexInCircle Caused: source collection is null or empty");
-        return -1;
-      }
-
       var index = 0;
       foreach (var i in collection) {
         if (Equals(i, item)) return index;
