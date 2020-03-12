@@ -10,8 +10,8 @@ namespace InteractionSystem {
     public readonly float startDistance;
     public readonly float startTime;
 
-    public Vector3 sourcePos { get => source.transform.position; }
-    public Vector3 targetPos { get => target.transform.position; }
+    public Vector3 sourcePos { get => source.transform.position; set => source.transform.position = value; }
+    public Vector3 targetPos { get => target.transform.position; set => target.transform.position = value; }
 
     /// <summary> Vector between source and target </summary>
     public Vector3 dif {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
@@ -7,6 +7,7 @@ using System.Linq;
 namespace InteractionSystem {
   [RequireComponent(typeof(Rigidbody))]
   [RequireComponent(typeof(Interactable))]
+  [RequireComponent(typeof(CollisionCounter))]
   public class Movable : MonoBehaviour {
 
     [
@@ -15,11 +16,8 @@ namespace InteractionSystem {
     ]
     public MyBox.FloatRange distanceRange = new MyBox.FloatRange(0, 1);
 
-    [Tooltip("Move " + nameof(Interactable) + " to the center of the " + nameof(Interactor) + "'s ray")]
-    public bool restrictCenter;
-
-    [Tooltip("Maximum force towards target movement position when colliding")]
-    public float dragForce = 20;
+    [Tooltip("!!! Move " + nameof(Interactable) + " to the center of the " + nameof(Interactor) + "'s ray")]
+    public bool restrictCenter = true;
 
     [Tooltip("Enable collision when no longer colliding with the " + nameof(Interactor) + " instead of immediately")]
     public bool waitCollisionEnd = true;
@@ -93,6 +91,7 @@ namespace InteractionSystem {
         waitForExit = null;
       }
     }
+
     public void OnActive(Interaction inter) {
       prevPoses.Add(inter.dif);
       var targetPos = inter.sourcePos + (inter.dif.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
@@ -105,9 +104,10 @@ namespace InteractionSystem {
         if (rb.SweepTest(dir, out var ad, dif.magnitude)) {
           waitForExit = ad.collider;
           rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
+          rb.velocity = Vector3.Project(rb.velocity, dif);
         } else {
-          rb.velocity = Vector3.zero;
-          transform.position = targetPos;
+          inter.target.GetComponent<Rigidbody>().velocity = Vector3.zero;
+          inter.targetPos = targetPos;
         }
       }
     }
