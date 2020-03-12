@@ -9,12 +9,6 @@ namespace InteractionSystem {
   [RequireComponent(typeof(Interactable))]
   public class Movable : MonoBehaviour {
 
-    [Tooltip(
-      "The maximum amount of samples to take from previous positions for velocity calculation.\n\n" +
-      "Higher values reduce the chance of small movements affecting the throw in an unwanted manner."
-    )]
-    public int sampleCount = 3;
-
     [
       Tooltip("Keep distance from the " + nameof(Interactor) + " within this range (from 0 to maximum interaction distance)"),
       MyBox.MinMaxRange(0, 1)
@@ -37,26 +31,16 @@ namespace InteractionSystem {
     private Interactable interactable;
     private Rigidbody rb;
 
-    private CircularBuffer<Sample> samples;
-    private class Sample {
-      public Vector3 pos; public float delta;
-      public Sample(Vector3 pos, float delta) { this.pos = pos; this.delta = delta; }
-    }
 
     private Interaction interaction;
     private float targetDistance;
     private bool usedGravity;
-    private Vector3 prevPos;
+    private Vector3 revRelPos { get => prevPoses[1]; }
+    private CircularBuffer<Vector3> prevPoses = new CircularBuffer<Vector3>(2);
     private List<Collider> associates = new List<Collider>();
-
-    void OnValidate() {
-      sampleCount = math.max(3, sampleCount);
-      samples = new CircularBuffer<Sample>(sampleCount);
-    }
-
+    private Collider waitForExit;
 
     void Start() {
-      OnValidate();
       rb = GetComponent<Rigidbody>();
       interactable = GetComponent<Interactable>();
       interactable.AddActivationEventListeners(OnActivate, OnActive, OnDeactive);
@@ -82,65 +66,67 @@ namespace InteractionSystem {
       }
     }
 
+
+
     public void OnActivate(Interaction inter) {
       if (interaction && !interaction.ended) inter.End();
       interaction = inter;
       usedGravity = rb.useGravity;
+      waitForExit = null;
       var associate = inter.source.associatedCollider;
       if (associate) {
         Physics.IgnoreCollision(rb.GetComponent<Collider>(), associate);
         associates.RemoveAll(e => e == associate);
       }
       rb.useGravity = false;
-      var maxDir = inter.dir.SetLen(inter.source.maxDistance);
+      var maxDif = inter.dif.SetLen(inter.source.maxDistance);
       Line line = new Line(
-        Vector3.Lerp(inter.sourcePos, inter.sourcePos + maxDir, distanceRange.min),
-        Vector3.Lerp(inter.sourcePos, inter.sourcePos + maxDir, distanceRange.max)
+        Vector3.Lerp(inter.sourcePos, inter.sourcePos + maxDif, distanceRange.min),
+        Vector3.Lerp(inter.sourcePos, inter.sourcePos + maxDif, distanceRange.max)
       );
       var closestPoint = line.ClampToLine(inter.targetPos);
       targetDistance = Vector3.Distance(inter.sourcePos, closestPoint);
     }
 
+    void OnCollisionExit(Collision col) {
+      if (col.collider == waitForExit) {
+        waitForExit = null;
+      }
+    }
     public void OnActive(Interaction inter) {
-      samples.Add(new Sample(transform.position, Time.deltaTime));
-      var targetPos = inter.sourcePos + (inter.dir.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
-      var dir = targetPos - transform.position;
-      var dirNorm = dir.normalized;
+      prevPoses.Add(inter.dif);
+      var targetPos = inter.sourcePos + (inter.dif.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
+      var dif = targetPos - rb.position;
+      var dir = dif.normalized;
 
-      if (rb.SweepTest(dirNorm, out var _, dir.magnitude)) {
-        rb.AddForce(dirNorm * dragForce, ForceMode.Force);
+      if (waitForExit) {
+        rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
       } else {
-        rb.velocity = Vector3.zero;
-        transform.position = targetPos;
+        if (rb.SweepTest(dir, out var ad, dif.magnitude)) {
+          waitForExit = ad.collider;
+          rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
+        } else {
+          rb.velocity = Vector3.zero;
+          transform.position = targetPos;
+        }
       }
     }
 
     public void OnDeactive(Interaction inter) {
       rb.useGravity = usedGravity;
+
       if (waitCollisionEnd && inter.source.associatedCollider)
         associates.Add(interaction.source.associatedCollider);
 
-      // Transfer velocity >>>
-      var count = 0;
-      Sample merged = new Sample(Vector3.zero, 0);
-      foreach (var sample in samples) {
-        if (sample != null) {
-          count++;
-          if (count == 1) continue;
-          merged.pos += sample.pos;
-          merged.delta += sample.delta;
-        }
-      }
-      // Need atleast 3 valid samples
-      if (count >= 3) {
-        var oldest = samples[samples.Length - 1].pos;
-        var vel = -(oldest - merged.pos / (count - 1)) / merged.delta;
-        rb.velocity = vel;
-      } else {
-        rb.velocity = Vector3.zero;
-      }
-      samples.Clear();
-      // <<<
+      // Transfer some force
+      var vel = (inter.dif - revRelPos) / Time.deltaTime;
+      var force = vel * rb.mass;
+      force = force.SetLenSafe(Mathf.Min(force.magnitude, inter.source.prefs.maxForce));
+      rb.AddForce(force, ForceMode.Impulse);
+
+      // Add own velocity
+      rb.velocity = (inter.sourcePos - inter.source.prevPos) / Time.deltaTime;
+
     }
   }
 }

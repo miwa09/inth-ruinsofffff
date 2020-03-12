@@ -490,7 +490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b664f2aa7650621479d6f2b287b833d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleCount: 3
   distanceRange:
     min: 0.25494802
     max: 1
@@ -897,7 +896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b664f2aa7650621479d6f2b287b833d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleCount: 3
   distanceRange:
     min: 0.25494802
     max: 1
@@ -1034,48 +1032,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UsePipelineSettings: 1
---- !u!1 &1387636002 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6430596563591692707, guid: f864515de00b47b46a718d3d6e03c353,
-    type: 3}
-  m_PrefabInstance: {fileID: 7396346813840855554}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1387636005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1387636002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4100a02765c791f499b52f5897106c7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filterTag: 1
-  filteredTag: Untagged
-  enterEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  stayEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  exitEvent:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!65 &1387636006
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1387636002}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1550001278
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1131,26 +1087,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7055048709003013925, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
-        type: 3}
-      propertyPath: restrictions.angle
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 7055048709003013925, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
-        type: 3}
-      propertyPath: restrictions.distance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7055048709003013925, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
-        type: 3}
-      propertyPath: restrictions.sigth
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7055048709003013925, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
-        type: 3}
-      propertyPath: associatedCollider
-      value: 
-      objectReference: {fileID: 1746728018}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e62f5703e5f8d2488a5e1bc8433be41, type: 3}
 --- !u!1 &1633263108
@@ -1184,7 +1120,7 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Convex: 0
-  m_CookingOptions: 30
+  m_CookingOptions: -1
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1633263110
 MeshRenderer:
@@ -1247,122 +1183,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1730033706 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6205416407377811459, guid: 6f0d36941c9984943bdf7df4c26a17a7,
-    type: 3}
-  m_PrefabInstance: {fileID: 6205416407518996490}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1730033707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730033706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f79dcba26214c984581705296b496664, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dead: 0
-  hp: {fileID: 0}
-  restrictHealing: 1
-  onDeath:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1730033713}
-        m_MethodName: set_material
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 9f9db0eba08dcbd4b94c45930159b019,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onRevive:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1730033713}
-        m_MethodName: set_material
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: eb47c4f906060eb4f9229d8046649c2a,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1730033708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730033706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e7945e9678a6494cb3f92bee388c7d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  invulnerable: 0
-  hp: {fileID: 0}
-  onGainInvulnerability:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseInvulnerability:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1730033709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730033706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1cc42cf407abdd408a416709ce85595, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  duration: 0
-  highDamageOverride: 1
-  hp: {fileID: 0}
---- !u!114 &1730033710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730033706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb1cb7b3f49992c409e9349a3fea31c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stamina: 1
-  maximum: 1
-  regenPerSec: 1
-  regenDelay: 0.5
---- !u!23 &1730033713 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 6205416407377811456, guid: 6f0d36941c9984943bdf7df4c26a17a7,
-    type: 3}
-  m_PrefabInstance: {fileID: 6205416407518996490}
-  m_PrefabAsset: {fileID: 0}
---- !u!143 &1746728018 stripped
-CharacterController:
-  m_CorrespondingSourceObject: {fileID: 1789906801, guid: 2e62f5703e5f8d2488a5e1bc8433be41,
-    type: 3}
-  m_PrefabInstance: {fileID: 1550001278}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1815149805
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1532,7 +1352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b664f2aa7650621479d6f2b287b833d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleCount: 3
   distanceRange:
     min: 0.25494802
     max: 1
@@ -1741,10 +1560,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1730033707, guid: 6f0d36941c9984943bdf7df4c26a17a7, type: 3}
-      propertyPath: _health
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 3709214262549905765, guid: 6f0d36941c9984943bdf7df4c26a17a7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1868,21 +1683,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 527830703158496512, guid: f864515de00b47b46a718d3d6e03c353,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 527830703158496512, guid: f864515de00b47b46a718d3d6e03c353,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 527830703158496512, guid: f864515de00b47b46a718d3d6e03c353,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6430596563591692707, guid: f864515de00b47b46a718d3d6e03c353,
         type: 3}

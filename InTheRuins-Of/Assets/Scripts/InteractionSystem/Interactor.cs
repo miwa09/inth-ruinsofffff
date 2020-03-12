@@ -27,24 +27,39 @@ namespace InteractionSystem {
     )]
     public Type type = Type.Hold;
     public enum Type { Hold, Toggle, Instant }
+
+
     public DeactivationRules restrictions;
     [System.Serializable]
     public class DeactivationRules {
+
       [Tooltip("Deactivate if the raycast no longer hits the " + nameof(Interactable))]
       public bool sigth = true;
       [Tooltip("The mask used for the sight raycast")]
       public LayerMask sigthMask;
 
-      [Tooltip("Deactivate " + nameof(Interactable) + " if the maximum distance is exeeded")]
+      [Tooltip("Deactivate " + nameof(Interactable) + " if the distance exceeds the value of " + nameof(maxDistance) + " multiplied by 1.1")]
       public bool distance = true;
 
-      [Tooltip("Deactivate if the angle towards " + nameof(Interactable) + " exeeds this"), Range(0, 180)]
+      [Tooltip("Deactivate if the angle towards " + nameof(Interactable) + " exceeds this"), Range(0, 180)]
       public float angle = 180f;
     }
 
+    public Options prefs;
+    [System.Serializable]
+    public class Options {
+
+      [Tooltip("Maximum force applied to an object (e.g. when colliding or throwing)")]
+      public float maxForce = 1;
+    }
+
+
+    public Vector3 prevPos { get; private set; }
 
     protected Interactable interactable;
     protected Interaction interaction;
+
+    private Vector3 prevForward;
 
     void LateUpdate() {
       // If an interaction is happening
@@ -56,7 +71,7 @@ namespace InteractionSystem {
           LateUpdate();
           return;
         }
-        if (type == Type.Toggle ? Input.GetKeyDown(key) : !Input.GetKey(key) || !Complies(interaction)) {
+        if (type == Type.Toggle ? Input.GetKeyDown(key) : !Input.GetKey(key) || !CompliesWithRestrictions()) {
           interactable.Deactivate();
           return;
         }
@@ -101,25 +116,32 @@ namespace InteractionSystem {
           }
         }
       }
+      // Use these values for sight check etc. because the target is moved after the checks
+      // and this object moves independently
+      prevForward = transform.forward;
+      prevPos = transform.position;
     }
 
-    bool Complies(Interaction interaction) {
+    bool CompliesWithRestrictions() {
+
+      Collider targetCollider = null;
       if (restrictions.sigth) {
-        var len = restrictions.distance ? maxDistance : float.PositiveInfinity;
-        if (Physics.Raycast(interaction.sourcePos, transform.forward, out var hit, len, restrictions.sigthMask)) {
+        if (Physics.Raycast(prevPos, prevForward, out var hit, float.PositiveInfinity, restrictions.sigthMask)) {
           if (hit.collider.gameObject != interaction.target.gameObject) return false;
+          else targetCollider = hit.collider;
         } else {
           return false;
         }
       }
-      // Distance checking is done with the raycast if sigth is enabled!
-      if (restrictions.distance && !restrictions.sigth) {
-        if (interaction.distance > maxDistance) return false;
+
+      if (restrictions.distance) {
+        if (!targetCollider) targetCollider = interaction.target.GetComponent<Collider>();
+        if (Vector3.Distance(prevPos, targetCollider.ClosestPoint(prevPos)) > maxDistance * 1.1f) return false;
       }
 
       if (restrictions.angle < 180) {
-        var to = this.interaction.source.transform.forward;
-        var from = (this.interaction.targetPos - this.interaction.sourcePos).normalized;
+        var to = prevForward;
+        var from = (interaction.targetPos - prevPos).normalized;
         if (Vector3.Angle(to, from) > restrictions.angle) return false;
       }
 

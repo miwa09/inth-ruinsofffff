@@ -14,14 +14,14 @@ namespace InteractionSystem {
     public Vector3 targetPos { get => target.transform.position; }
 
     /// <summary> Vector between source and target </summary>
-    public Vector3 dir {
+    public Vector3 dif {
       get => targetPos - sourcePos;
       set => target.transform.position = sourcePos + value;
     }
 
     public float distance {
       get => Vector3.Distance(sourcePos, targetPos);
-      set => target.transform.position = sourcePos + dir * value;
+      set => target.transform.position = sourcePos + dif * value;
     }
 
     public float duration { get => ended ? endTime - startTime : Time.time - startTime; }
