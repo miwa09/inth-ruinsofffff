@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
-using System.Linq;
 
 namespace InteractionSystem {
   [RequireComponent(typeof(Rigidbody))]
   [RequireComponent(typeof(Interactable))]
-  [RequireComponent(typeof(CollisionCounter))]
   public class Movable : MonoBehaviour {
 
     [
@@ -28,6 +26,7 @@ namespace InteractionSystem {
 
     private Interactable interactable;
     private Rigidbody rb;
+    private CollisionTracker cc;
 
 
     private Interaction interaction;
@@ -36,10 +35,10 @@ namespace InteractionSystem {
     private Vector3 revRelPos { get => prevPoses[1]; }
     private CircularBuffer<Vector3> prevPoses = new CircularBuffer<Vector3>(2);
     private List<Collider> associates = new List<Collider>();
-    private Collider waitForExit;
 
     void Start() {
       rb = GetComponent<Rigidbody>();
+      cc = GetComponent<CollisionTracker>() ?? gameObject.AddComponent<CollisionTracker>();
       interactable = GetComponent<Interactable>();
       interactable.AddActivationEventListeners(OnActivate, OnActive, OnDeactive);
     }
@@ -70,7 +69,6 @@ namespace InteractionSystem {
       if (interaction && !interaction.ended) inter.End();
       interaction = inter;
       usedGravity = rb.useGravity;
-      waitForExit = null;
       var associate = inter.source.associatedCollider;
       if (associate) {
         Physics.IgnoreCollision(rb.GetComponent<Collider>(), associate);
@@ -86,29 +84,21 @@ namespace InteractionSystem {
       targetDistance = Vector3.Distance(inter.sourcePos, closestPoint);
     }
 
-    void OnCollisionExit(Collision col) {
-      if (col.collider == waitForExit) {
-        waitForExit = null;
-      }
-    }
-
     public void OnActive(Interaction inter) {
       prevPoses.Add(inter.dif);
       var targetPos = inter.sourcePos + (inter.dif.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
       var dif = targetPos - rb.position;
       var dir = dif.normalized;
 
-      if (waitForExit) {
+      if (cc.colliding) {
+        rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
+        // Project velocity towards target if there is no collision
+        if (!rb.SweepTest(dir, out var ad, dif.magnitude)) rb.velocity = Vector3.Project(rb.velocity, dif);
+      } else if (rb.SweepTest(dir, out var ad, dif.magnitude)) {
         rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
       } else {
-        if (rb.SweepTest(dir, out var ad, dif.magnitude)) {
-          waitForExit = ad.collider;
-          rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
-          rb.velocity = Vector3.Project(rb.velocity, dif);
-        } else {
-          inter.target.GetComponent<Rigidbody>().velocity = Vector3.zero;
-          inter.targetPos = targetPos;
-        }
+        inter.target.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        inter.targetPos = targetPos;
       }
     }
 

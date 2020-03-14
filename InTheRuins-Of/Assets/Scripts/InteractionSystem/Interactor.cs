@@ -85,16 +85,26 @@ namespace InteractionSystem {
         if (Physics.Raycast(pos, transform.forward, out hit, rayLength, mask)) {
           // If hit interactable object
           if (hit.collider.TryGetComponent(out interactable)) {
+            // Check if a different interactable
+            if (prevInteractable && interactable != prevInteractable) {
+              if (prevInteractable.targeted) {
+                prevInteractable.Untarget();
+              }
+            }
             // Check if within the required distance
             if (hit.distance < maxDistance || Vector3.Distance(pos, hit.collider.ClosestPoint(pos)) < maxDistance) {
               if (Input.GetKeyDown(key)) {
                 // Pressed. Activate the interactable
-                if (type == Type.Instant) {
-                  interactable.Activate(this);
-                  interactable.Deactivate();
-                } else {
-                  interaction = interactable.Activate(this);
-                  interactable.Active();
+                switch (type) {
+                  case Type.Hold:
+                  case Type.Toggle:
+                    interaction = interactable.Activate(this);
+                    interactable.Active();
+                    break;
+                  case Type.Instant:
+                    interactable.Activate(this);
+                    interactable.Deactivate();
+                    break;
                 }
               } else {
                 // Not pressed. Target if necessary
@@ -102,11 +112,11 @@ namespace InteractionSystem {
                   interactable.Target();
                 }
               }
-            } else {
-              // No Interactable was hit. Untarget if necessary
-              if (prevInteractable && prevInteractable.targeted) {
-                prevInteractable.Untarget();
-              }
+            }
+          } else {
+            // No Interactable was hit. Untarget if necessary
+            if (prevInteractable && prevInteractable.targeted) {
+              prevInteractable.Untarget();
             }
           }
         } else {
