@@ -5,33 +5,55 @@ using System.Collections.Generic;
 
 
 
+[DefaultExecutionOrder(1000)]
 [RequireComponent(typeof(Collider))]
 public class CollisionTracker : MonoBehaviour {
 
-  public bool colliding { get => colliders.Count > 0; }
-
-  protected List<Collider> colliders = new List<Collider>();
-
-  void Update() {
-    Prune();
+  public bool colliding {
+    get {
+      PruneStale();
+      return colliders.Count > 0;
+    }
   }
 
+  private List<Collider> colliders = new List<Collider>();
+
+  public bool stale { get; private set; }
+
+  void LateUpdate() {
+    stale = true;
+  }
 
   public bool CollidingWith(Collider collider) {
-    Prune();
+    PruneStale();
     return colliders.Contains(collider);
   }
 
+  /// <summary>
+  /// State is marked stale at each LateUpdate.  
+  /// However you may want to signal that some collisions may have gone stale
+  /// so prune is called immediately when necessary.  
+  /// </summary>
+  public void SetStale() {
+    stale = true;
+  }
+
   public bool CollidingWith(GameObject gameObject, bool includeChildren = true) {
-    Prune();
+    PruneStale();
     var cols = includeChildren ? gameObject.GetComponentsInChildren<Collider>() : gameObject.GetComponents<Collider>();
     return colliders.Any(c => cols.Contains(c));
   }
 
 
-  void Prune() {
+  public void PruneStale() {
+    if (stale) Prune();
+  }
+
+  public void Prune() {
+    stale = false;
     colliders.RemoveAll(c => !c || !c.enabled || c.isTrigger);
   }
+
 
   void OnCollisionEnter(Collision col) {
     colliders.Add(col.collider);

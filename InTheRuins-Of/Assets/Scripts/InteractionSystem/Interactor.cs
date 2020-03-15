@@ -54,12 +54,16 @@ namespace InteractionSystem {
     }
 
 
-    public Vector3 prevPos { get; private set; }
+    public PositionHistory posHistory;
 
     protected Interactable interactable;
     protected Interaction interaction;
 
     private Vector3 prevForward;
+
+    void Start() {
+      posHistory = GetComponent<PositionHistory>() ?? gameObject.AddComponent<PositionHistory>();
+    }
 
     void LateUpdate() {
       // If an interaction is happening
@@ -129,14 +133,13 @@ namespace InteractionSystem {
       // Use these values for sight check etc. because the target is moved after the checks
       // and this object moves independently
       prevForward = transform.forward;
-      prevPos = transform.position;
     }
 
     bool CompliesWithRestrictions() {
 
       Collider targetCollider = null;
       if (restrictions.sigth) {
-        if (Physics.Raycast(prevPos, prevForward, out var hit, float.PositiveInfinity, restrictions.sigthMask)) {
+        if (Physics.Raycast(posHistory[1], prevForward, out var hit, float.PositiveInfinity, restrictions.sigthMask)) {
           if (hit.collider.gameObject != interaction.target.gameObject) return false;
           else targetCollider = hit.collider;
         } else {
@@ -146,12 +149,12 @@ namespace InteractionSystem {
 
       if (restrictions.distance) {
         if (!targetCollider) targetCollider = interaction.target.GetComponent<Collider>();
-        if (Vector3.Distance(prevPos, targetCollider.ClosestPoint(prevPos)) > maxDistance * 1.1f) return false;
+        if (Vector3.Distance(posHistory[1], targetCollider.ClosestPoint(posHistory[1])) > maxDistance * 1.1f) return false;
       }
 
       if (restrictions.angle < 180) {
         var to = prevForward;
-        var from = (interaction.targetPos - prevPos).normalized;
+        var from = (interaction.targetPos - posHistory[1]).normalized;
         if (Vector3.Angle(to, from) > restrictions.angle) return false;
       }
 

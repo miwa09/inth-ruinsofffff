@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 
 /// <summary>
-/// Represents a first-in, first-out fixed size list of objects. 
+/// Represents a first-in, first-out fixed size list of items. 
 /// </summary>
 public class CircularBuffer<T> : IEnumerable<T> {
 
@@ -14,7 +14,7 @@ public class CircularBuffer<T> : IEnumerable<T> {
     set => data[head - index] = value;
   }
 
-  public int Length { get => data.Length; }
+  public int Length { get => data.Length; set => Resize(value); }
 
   private T[] data;
   private CircularInt head;
@@ -31,11 +31,33 @@ public class CircularBuffer<T> : IEnumerable<T> {
     data[++head] = item;
   }
 
-  /// <summary> Set all elements to default value of element type </summary>
-  internal void Clear() {
+  /// <summary> Set all elements to the default value of element type </summary>
+  public void Clear() {
     for (int i = 0; i < data.Length; i++) {
       data[i] = default(T);
     }
+  }
+
+  /// <summary> Resizes the buffer </summary>
+  public void Resize(int length) {
+
+    var old = data;
+    // 56734  // Content
+
+    data = this.ToArray();
+    // 76543
+    // Element order is now new -> old
+
+    Array.Resize(ref data, length);
+    // 7654300000 // length 10
+    // 76         // length 2
+
+    data.Reverse();
+    // 0000034567
+
+    head = new CircularInt(length - 1, length);
+    // 0000034567
+    // ^        *  // ^ Write head * Read head
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
