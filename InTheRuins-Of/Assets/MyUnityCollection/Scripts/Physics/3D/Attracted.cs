@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyBox;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Attracted : MonoBehaviour {
   private Rigidbody rb;
   [Tooltip("The transform to attract towards")]
   public Transform attTransform;
-  [PositiveValueOnly]
+  [Min(0)]
   public float farStrength = 0.1f;
-  [PositiveValueOnly]
+  [Min(0)]
   public float nearStrength = 1;
   [Tooltip("Near attraction strength is applied at distances lower than this")]
   public float nearDistance = 0.1f;

@@ -6,13 +6,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider))]
 public class OnCollisionEvent : MonoBehaviour {
 
-  [Tooltip("Require collider to have specific tag for it to trigger the events")]
-  public bool filterTag;
-
-  [MyBox.ConditionalField(nameof(filterTag))]
-  [MyBox.Tag]
-  [Tooltip("The required tag for colliders")]
-  public string filteredTag;
+  [Tooltip("Require collider to have specific tag for it to trigger the events. Leave empty for no tag filtering")]
+  public string _tag;
 
   [Tooltip("Invoked when " + nameof(OnCollisionEnter) + " is triggered")]
   public TriggerUnityEvent enterEvent;
@@ -35,17 +30,17 @@ public class OnCollisionEvent : MonoBehaviour {
   }
 
   void OnCollisionEnter(Collision col) {
-    if (!filterTag || col.gameObject.tag == filteredTag) {
+    if (_tag != "" || col.gameObject.tag == _tag) {
       stayEvent.Invoke(col);
     }
   }
   void OnCollisionExit(Collision col) {
-    if (!filterTag || col.gameObject.tag == filteredTag) {
+    if (_tag != "" || col.gameObject.tag == _tag) {
       stayEvent.Invoke(col);
     }
   }
   void OnCollisionStay(Collision col) {
-    if (!filterTag || col.gameObject.tag == filteredTag) {
+    if (_tag != "" || col.gameObject.tag == _tag) {
       stayEvent.Invoke(col);
     }
   }
