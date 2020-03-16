@@ -57,7 +57,7 @@ public class CircularBuffer<T> : IEnumerable<T> {
 
     head = new CircularInt(length - 1, length);
     // 0000034567
-    // ^        *  // ^ Write head * Read head
+    // ^write   ^read
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

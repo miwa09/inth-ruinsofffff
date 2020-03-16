@@ -14,11 +14,11 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - PlayerHurtBox
-  - PlayerHitBox
-  - EnemyHurtBox
-  - EnemyHitBox
-  - 
+  - PlayerHurtCollider
+  - PlayerHitCollider
+  - EnemyHurtCollider
+  - EnemyHitCollider
+  - Player
   - 
   - 
   - 

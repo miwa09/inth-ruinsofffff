@@ -41,7 +41,7 @@ namespace InteractionSystem {
       [Tooltip("Deactivate " + nameof(Interactable) + " if the distance exceeds the value of " + nameof(maxDistance) + " multiplied by 1.1")]
       public bool distance = true;
 
-      [Tooltip("Deactivate if the angle towards " + nameof(Interactable) + " exceeds this"), Range(0, 180)]
+      [Tooltip("Deactivate if the angle to " + nameof(Interactable) + " exceeds this"), Range(0, 180)]
       public float angle = 180f;
     }
 
@@ -54,15 +54,14 @@ namespace InteractionSystem {
     }
 
 
-    public PositionHistory posHistory;
-
-    protected Interactable interactable;
-    protected Interaction interaction;
+    public Interactable interactable { get; private set; }
+    public Interaction interaction { get; private set; }
+    public TransformHistory transHistory { get; private set; }
 
     private Vector3 prevForward;
 
     void Start() {
-      posHistory = GetComponent<PositionHistory>() ?? gameObject.AddComponent<PositionHistory>();
+      transHistory = GetComponent<TransformHistory>() ?? gameObject.AddComponent<TransformHistory>();
     }
 
     void LateUpdate() {
@@ -76,7 +75,7 @@ namespace InteractionSystem {
           return;
         }
         if (type == Type.Toggle ? Input.GetKeyDown(key) : !Input.GetKey(key) || !CompliesWithRestrictions()) {
-          interactable.Deactivate();
+          interactable.Deactivate(out var _);
           return;
         }
         interactable.Active();
@@ -88,7 +87,8 @@ namespace InteractionSystem {
         var prevInteractable = interactable;
         if (Physics.Raycast(pos, transform.forward, out hit, rayLength, mask)) {
           // If hit interactable object
-          if (hit.collider.TryGetComponent(out interactable)) {
+          if (hit.collider.TryGetComponent<Interactable>(out var _interactable)) {
+            interactable = _interactable;
             // Check if a different interactable
             if (prevInteractable && interactable != prevInteractable) {
               if (prevInteractable.targeted) {
@@ -107,7 +107,7 @@ namespace InteractionSystem {
                     break;
                   case Type.Instant:
                     interactable.Activate(this);
-                    interactable.Deactivate();
+                    interactable.Deactivate(out var _);
                     break;
                 }
               } else {
@@ -139,7 +139,7 @@ namespace InteractionSystem {
 
       Collider targetCollider = null;
       if (restrictions.sigth) {
-        if (Physics.Raycast(posHistory[1], prevForward, out var hit, float.PositiveInfinity, restrictions.sigthMask)) {
+        if (Physics.Raycast(transHistory[1], prevForward, out var hit, float.PositiveInfinity, restrictions.sigthMask)) {
           if (hit.collider.gameObject != interaction.target.gameObject) return false;
           else targetCollider = hit.collider;
         } else {
@@ -149,12 +149,12 @@ namespace InteractionSystem {
 
       if (restrictions.distance) {
         if (!targetCollider) targetCollider = interaction.target.GetComponent<Collider>();
-        if (Vector3.Distance(posHistory[1], targetCollider.ClosestPoint(posHistory[1])) > maxDistance * 1.1f) return false;
+        if (Vector3.Distance(transHistory[1], targetCollider.ClosestPoint(transHistory[1])) > maxDistance * 1.1f) return false;
       }
 
       if (restrictions.angle < 180) {
         var to = prevForward;
-        var from = (interaction.targetPos - posHistory[1]).normalized;
+        var from = (interaction.targetPos - transHistory[1]).normalized;
         if (Vector3.Angle(to, from) > restrictions.angle) return false;
       }
 

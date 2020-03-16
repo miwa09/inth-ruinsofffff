@@ -14,6 +14,9 @@ namespace InteractionSystem {
     ]
     public MyBox.FloatRange distanceRange = new MyBox.FloatRange(0, 1);
 
+    [Tooltip("When letting go, transfer movement to velocity")]
+    public bool transferMovement = true;
+
     [Tooltip("!!! Move " + nameof(Interactable) + " to the center of the " + nameof(Interactor) + "'s ray")]
     public bool restrictCenter = true;
 
@@ -26,13 +29,18 @@ namespace InteractionSystem {
     public float baseReturnSpeed = 2f;
     public float returnTimeScale = 5f;
 
-    private Interactable interactable;
+
+    /// <summary> Whether this interactable is being interacted with </summary>
+    public bool interacting { get => interactable.interacting; }
+
+    public Interactable interactable { get; private set; }
+    public Interaction interaction { get => interactable.interaction; }
+    public new Rigidbody rigidbody { get => rb; }
+
     private Rigidbody rb;
     private CollisionTracker cc;
+    private TransformHistory transHistory;
 
-
-    private Interaction interaction;
-    private PositionHistory posHistory;
     private List<Collider> associates = new List<Collider>();
 
     private float targetDistance;
@@ -46,8 +54,8 @@ namespace InteractionSystem {
       interactable.AddActivationEventListeners(OnActivate, OnActive, OnDeactive);
 
       cc = GetComponent<CollisionTracker>() ?? gameObject.AddComponent<CollisionTracker>();
-      posHistory = GetComponent<PositionHistory>() ?? gameObject.AddComponent<PositionHistory>();
-      posHistory.SetMinSize(2);
+      transHistory = GetComponent<TransformHistory>() ?? gameObject.AddComponent<TransformHistory>();
+      transHistory.SetMinSize(2);
     }
 
     void FixedUpdate() {
@@ -71,34 +79,31 @@ namespace InteractionSystem {
     }
 
 
-
-    public void OnActivate(Interaction inter) {
-      if (interaction && !interaction.ended) inter.End();
-      interaction = inter;
+    public void OnActivate(Interaction _) {
       usedGravity = rb.useGravity;
-      var associate = inter.source.associatedCollider;
+      var associate = interaction.source.associatedCollider;
       if (associate) {
         Physics.IgnoreCollision(rb.GetComponent<Collider>(), associate);
         associates.RemoveAll(e => e == associate);
       }
       rb.useGravity = false;
-      var maxDif = inter.dif.SetLen(inter.source.maxDistance);
+      var maxDif = interaction.dif.SetLen(interaction.source.maxDistance);
       Line line = new Line(
-        Vector3.Lerp(inter.sourcePos, inter.sourcePos + maxDif, distanceRange.min),
-        Vector3.Lerp(inter.sourcePos, inter.sourcePos + maxDif, distanceRange.max)
+        Vector3.Lerp(interaction.sourcePos, interaction.sourcePos + maxDif, distanceRange.min),
+        Vector3.Lerp(interaction.sourcePos, interaction.sourcePos + maxDif, distanceRange.max)
       );
-      var closestPoint = line.ClampToLine(inter.targetPos);
-      targetDistance = Vector3.Distance(inter.sourcePos, closestPoint);
+      var closestPoint = line.ClampToLine(interaction.targetPos);
+      targetDistance = Vector3.Distance(interaction.sourcePos, closestPoint);
     }
 
 
-    public void OnActive(Interaction inter) {
-      var targetPos = inter.sourcePos + (inter.dif.SetLenSafe(targetDistance).SetDirSafe(inter.source.transform.forward));
+    public void OnActive(Interaction _) {
+      var targetPos = interaction.sourcePos + (interaction.dif.SetLenSafe(targetDistance).SetDirSafe(interaction.source.transform.forward));
       var dif = targetPos - rb.position;
       var dir = dif.normalized;
 
       if (cc.colliding) {
-        rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
+        rb.AddForce(dir * interaction.source.prefs.maxForce, ForceMode.Force);
         returned = false;
         returnTime = Time.time;
         // Project velocity towards target if there is no collision
@@ -106,39 +111,44 @@ namespace InteractionSystem {
           rb.velocity = Vector3.Project(rb.velocity, dif);
         }
       } else if (rb.SweepTest(dir, out var _, dif.magnitude)) {
-        rb.AddForce(dir * inter.source.prefs.maxForce, ForceMode.Force);
+        returned = false;
+        returnTime = Time.time;
+        rb.AddForce(dir * interaction.source.prefs.maxForce, ForceMode.Force);
       } else {
         // No collision detected
         if (returned) {
           rb.velocity = Vector3.zero;
-          inter.targetPos = targetPos;
+          interaction.targetPos = targetPos;
         } else {
           float elapsed = (Time.time - returnTime) * returnTimeScale;
           float maxMove = baseReturnSpeed * Time.deltaTime + Mathf.Pow(elapsed, 2);
-          transform.position = Vector3.MoveTowards(transform.position, targetPos, maxMove);
+          interaction.targetPos = Vector3.MoveTowards(interaction.targetPos, targetPos, maxMove);
           if (transform.position == targetPos) returned = true;
         }
       }
     }
 
 
-    public void OnDeactive(Interaction inter) {
+    public void OnDeactive(Interaction _) {
       rb.useGravity = usedGravity;
 
-      if (waitCollisionEnd && inter.source.associatedCollider)
+      if (waitCollisionEnd && interaction.source.associatedCollider)
         associates.Add(interaction.source.associatedCollider);
 
-      // Transfer some force
-      var prevDif = posHistory[1] - inter.source.posHistory[1];
-      var vel = (inter.dif - prevDif) / Time.deltaTime;
+      if (transferMovement) {
+        // Transfer relative movement
+        var prevDif = transHistory[1].position - interaction.source.transHistory[1].position;
+        var vel = (interaction.dif - prevDif) / Time.deltaTime;
 
-      var force = vel * rb.mass;
-      force = force.SetLenSafe(Mathf.Min(force.magnitude, inter.source.prefs.maxForce));
-      rb.AddForce(force, ForceMode.Impulse);
+        var force = vel * rb.mass;
+        force = force.SetLenSafe(Mathf.Min(force.magnitude, interaction.source.prefs.maxForce));
+        rb.AddForce(force, ForceMode.Impulse);
 
-      // Add interactor movement
-      rb.velocity = (inter.sourcePos - inter.source.posHistory[1]) / Time.deltaTime;
-
+        // Transfer interactor movement
+        rb.velocity = (interaction.sourcePos - interaction.source.transHistory[1]) / Time.deltaTime;
+      } else {
+        rb.velocity = Vector3.zero;
+      }
     }
   }
 }

@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using Malee;
 
-[System.Serializable] public class StringEvent : UnityEvent<string> { }
+[System.Serializable]
+public class StringEvent : UnityEvent<string> { }
 
 /// <summary>
 /// Create inputs that fire UnityEvents
 /// </summary>
-public class InputEventInvoker : MonoBehaviour {
+public class OnInputEvent : MonoBehaviour {
 
   [System.Serializable]
   public class InputEventList : ReorderableArray<InputEvent> { }
