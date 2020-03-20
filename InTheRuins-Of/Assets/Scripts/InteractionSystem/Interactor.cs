@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using MUC.Components;
+
+
 namespace InteractionSystem {
   public class Interactor : MonoBehaviour {
 
@@ -17,7 +20,6 @@ namespace InteractionSystem {
     [Tooltip("When interacting with a dynamic/movable " + nameof(Interactable) + " ignore collisions of this collider and the target collider")]
     public Collider associatedCollider;
 
-    [MyBox.SearchableEnum]
     public KeyCode key = KeyCode.E;
 
     [Tooltip(
