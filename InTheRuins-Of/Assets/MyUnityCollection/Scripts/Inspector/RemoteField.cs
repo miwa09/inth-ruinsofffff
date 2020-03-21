@@ -80,6 +80,6 @@ namespace MUC.Inspector.Internal {
       }
     }
   }
-#endif
 
 }
+#endif

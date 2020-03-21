@@ -12,10 +12,9 @@ namespace MUC.Components {
   /// </summary>
   public class OnInputEvent : MonoBehaviour {
 
-    [System.Serializable]
-    public class InputEventList : ReorderableArray<InputEvent> { }
+
     [Reorderable]
-    public InputEventList inputEvents;
+    public InputEvent[] inputEvents;
 
 
     private List<InputEvent> fixedEvents = new List<InputEvent>();
@@ -36,7 +35,7 @@ namespace MUC.Components {
       Up,
     }
 
-    // Start is called before the first frame update
+    // Start is called before the fi rst frame update
     void Start() {
 
     }

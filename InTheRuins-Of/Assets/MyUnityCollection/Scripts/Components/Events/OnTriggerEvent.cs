@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+using MUC.Inspector;
+
 
 namespace MUC.Components {
 
@@ -8,7 +10,7 @@ namespace MUC.Components {
   public class OnTriggerEvent : MonoBehaviour {
     [Tooltip("Require collider to have specific tag for it to trigger the events")]
     public bool filterTag;
-    // !!! DRAW IF ATTRIBUTE
+    [DrawIf(nameof(filterTag))]
     [Tooltip("The required tag for colliders")]
     public string filteredTag;
     [Tooltip("Invoked when " + nameof(OnTriggerEnter) + " is triggered")]
