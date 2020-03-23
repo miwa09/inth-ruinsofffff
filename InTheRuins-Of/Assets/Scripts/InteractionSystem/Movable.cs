@@ -3,16 +3,20 @@ using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
 
+using MUC.Components;
+using MUC.Types;
+using MUC.Types.Extensions;
+
+
 namespace InteractionSystem {
   [RequireComponent(typeof(Rigidbody))]
   [RequireComponent(typeof(Interactable))]
   public class Movable : MonoBehaviour {
 
-    [
-      Tooltip("Keep distance from the " + nameof(Interactor) + " within this range (from 0 to maximum interaction distance)"),
-      MyBox.MinMaxRange(0, 1)
-    ]
-    public MyBox.FloatRange distanceRange = new MyBox.FloatRange(0, 1);
+    [Tooltip("Keep distance from the " + nameof(Interactor) + " above this fraction of maximum distance (0 = zero distance)")]
+    public float distanceMin = 0;
+    [Tooltip("Keep distance from the " + nameof(Interactor) + " below this fraction of maximum distance (1 = maximum interaction distance)")]
+    public float distanceMax = 1;
 
     [Tooltip("When letting go, transfer movement to velocity")]
     public bool transferMovement = true;
@@ -89,8 +93,8 @@ namespace InteractionSystem {
       rb.useGravity = false;
       var maxDif = interaction.dif.SetLen(interaction.source.maxDistance);
       Line line = new Line(
-        Vector3.Lerp(interaction.sourcePos, interaction.sourcePos + maxDif, distanceRange.min),
-        Vector3.Lerp(interaction.sourcePos, interaction.sourcePos + maxDif, distanceRange.max)
+        Vector3.Lerp(interaction.sourcePos, interaction.sourcePos + maxDif, distanceMin),
+        Vector3.Lerp(interaction.sourcePos, interaction.sourcePos + maxDif, distanceMax)
       );
       var closestPoint = line.ClampToLine(interaction.targetPos);
       targetDistance = Vector3.Distance(interaction.sourcePos, closestPoint);

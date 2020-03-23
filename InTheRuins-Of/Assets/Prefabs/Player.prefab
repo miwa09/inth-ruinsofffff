@@ -136,7 +136,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4448068258976056}
   - component: {fileID: 82712217391461128}
-  - component: {fileID: 490839457}
   - component: {fileID: 1789906801}
   - component: {fileID: 1789906802}
   - component: {fileID: 630990435}
@@ -258,54 +257,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &490839457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1743903104223250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 276a8d92ab1f74d4c91a40f2c7846a96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputEvents:
-    array:
-    - key: 323
-      type: 2
-      fixedUpdate: 0
-      event:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 8523116944402654144}
-            m_MethodName: Play
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: Swing2
-              m_BoolArgument: 0
-            m_CallState: 2
-    - key: 273
-      type: 2
-      fixedUpdate: 1
-      event:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 1789906801}
-            m_MethodName: 
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: Swing2
-              m_BoolArgument: 0
-            m_CallState: 2
 --- !u!143 &1789906801
 CharacterController:
   m_ObjectHideFlags: 0
@@ -521,12 +472,6 @@ PrefabInstance:
 --- !u!4 &3689157807492280077 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3372591339765981529, guid: c232df654614abb449772ed3630b0c24,
-    type: 3}
-  m_PrefabInstance: {fileID: 2161548114079567444}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &8523116944402654144 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7761792581534182804, guid: c232df654614abb449772ed3630b0c24,
     type: 3}
   m_PrefabInstance: {fileID: 2161548114079567444}
   m_PrefabAsset: {fileID: 0}

@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+﻿
 
-namespace Satsaa.Inspector {
+namespace MUC.Inspector {
+
+  using UnityEngine;
 
   [System.Serializable] public class RemoteInt : RemoteField<int> { };
   [System.Serializable] public class RemoteFloat : RemoteField<float> { };
@@ -13,8 +11,10 @@ namespace Satsaa.Inspector {
 
   [System.Serializable]
   public class RemoteField<T> {
+
     public MonoBehaviour targetScript;
     public string fieldName;
+
     private System.Reflection.FieldInfo GetFieldInfo() {
       if (targetScript == null)
         return null;
@@ -39,9 +39,18 @@ namespace Satsaa.Inspector {
     }
   }
 
+}
+
+
 #if UNITY_EDITOR
+namespace MUC.Inspector.Internal {
+
+  using System.Collections.Generic;
+  using UnityEngine;
+  using UnityEditor;
+
   [CustomPropertyDrawer(typeof(RemoteFloat))]
-  public class RemoteFloatDrawer : PropertyDrawer {
+  internal class RemoteFloatDrawer : PropertyDrawer {
 
     bool isOut;
     List<string> options;
@@ -71,5 +80,6 @@ namespace Satsaa.Inspector {
       }
     }
   }
-#endif
+
 }
+#endif

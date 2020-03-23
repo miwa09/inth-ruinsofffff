@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+using MUC.Collections;
+using MUC.Inspector;
+
 namespace CharacterComponentSystem {
   public class HP : MonoBehaviour {
 
@@ -45,13 +48,7 @@ namespace CharacterComponentSystem {
       prevHealth = health;
     }
 
-    [MyBox.ButtonMethod]
-    public void DamageTest() => Damage(1);
-    [MyBox.ButtonMethod]
-    public void HealTest() => Heal(1);
-    [MyBox.ButtonMethod]
-    public void SetTest() => Set(10);
-
+    [Button()]
     /// <summary> Substracts `damage` from health </summary>
     public void Damage(float damage) {
       var mod = damageModifiers.Apply(damage);
@@ -59,6 +56,7 @@ namespace CharacterComponentSystem {
       onDamage.Invoke(this, damage, mod);
     }
 
+    [Button(1)]
     /// <summary> Adds `healing` to health </summary>
     public void Heal(float healing) {
       var mod = healModifiers.Apply(healing);
@@ -66,6 +64,7 @@ namespace CharacterComponentSystem {
       onHeal.Invoke(this, healing, mod);
     }
 
+    [Button(10)]
     /// <summary> Sets the value of health to `value` </summary>
     public void Set(float value) {
       var mod = setModifiers.Apply(value);
