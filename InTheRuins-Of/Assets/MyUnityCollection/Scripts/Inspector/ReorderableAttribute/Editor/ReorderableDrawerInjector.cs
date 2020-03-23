@@ -16,7 +16,11 @@ namespace MUC.Inspector.Internal {
     [InitializeOnLoadMethod]
     private static void InitializeOnLoad() {
       UnityEngine.Profiling.Profiler.BeginSample("ReorderableListDrawerInjector");
-      drawerKeySetDictionary.Add(typeof(List<>), s_drawerKeySet);
+
+      // Generates errors on compile
+      // if (!drawerKeySetDictionary.Contains(typeof(List<>)))
+      //   drawerKeySetDictionary.Add(typeof(List<>), drawerKeySet);
+
       ApplyToUnityObjectTypes();
       UnityEngine.Profiling.Profiler.EndSample();
     }
@@ -55,7 +59,7 @@ namespace MUC.Inspector.Internal {
 
       if (type.IsArray) {
         if (drawerKeySetDictionary.Contains(type) == false)
-          drawerKeySetDictionary.Add(type, s_drawerKeySet);
+          drawerKeySetDictionary.Add(type, drawerKeySet);
 
         ApplyToArraysAndListsInType(visited, type.GetElementType());
         return;
@@ -63,7 +67,7 @@ namespace MUC.Inspector.Internal {
 
       if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>)) {
         if (drawerKeySetDictionary.Contains(type) == false)
-          drawerKeySetDictionary.Add(type, s_drawerKeySet);
+          drawerKeySetDictionary.Add(type, drawerKeySet);
 
         ApplyToArraysAndListsInType(visited, type.GetGenericArguments()[0]);
         return;
@@ -77,7 +81,7 @@ namespace MUC.Inspector.Internal {
 
     //----------------------------------------------------------------------
 
-    private static readonly object s_drawerKeySet = CreateDrawerKeySet();
+    private static readonly object drawerKeySet = CreateDrawerKeySet();
 
     private static object CreateDrawerKeySet() {
       var DrawerKeySet = typeof(PropertyDrawer).Assembly.GetType("UnityEditor.ScriptAttributeUtility+DrawerKeySet");
@@ -103,7 +107,8 @@ namespace MUC.Inspector.Internal {
 
       // ensure initialization of
       // ScriptAttributeUtility.draw erTypeForType
-      ScriptAttributeUtility.GetMethod("GetDrawerTypeForType", BindingFlags.NonPublic | BindingFlags.Static)
+      ScriptAttributeUtility
+        .GetMethod("GetDrawerTypeForType", BindingFlags.NonPublic | BindingFlags.Static)
         .Invoke(null, new object[] { typeof(object) });
 
       return (IDictionary)ScriptAttributeUtility.GetField("s_DrawerTypeForType", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);

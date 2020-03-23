@@ -16,24 +16,17 @@ namespace MUC.Components {
     [Reorderable]
     public InputEvent[] inputEvents;
 
-
     private List<InputEvent> fixedEvents = new List<InputEvent>();
 
     [System.Serializable]
     public class InputEvent {
-      // !!! ENUM ATTRIBUTE
       public KeyCode key;
-      public Type type = Type.Down;
+      public InputType type = InputType.Down;
       public bool fixedUpdate;
       public UnityEvent @event;
     }
 
-    public enum Type {
-      Held,
-      NotHeld,
-      Down,
-      Up,
-    }
+    public enum InputType { Held, NotHeld, Down, Up, }
 
     // Start is called before the fi rst frame update
     void Start() {
@@ -45,16 +38,16 @@ namespace MUC.Components {
       foreach (var inputEvent in inputEvents) {
         bool activated = false;
         switch (inputEvent.type) {
-          case Type.Down:
+          case InputType.Down:
             activated = Input.GetKeyDown(inputEvent.key);
             break;
-          case Type.Up:
+          case InputType.Up:
             activated = Input.GetKeyUp(inputEvent.key);
             break;
-          case Type.Held:
+          case InputType.Held:
             activated = Input.GetKey(inputEvent.key);
             break;
-          case Type.NotHeld:
+          case InputType.NotHeld:
             activated = !Input.GetKey(inputEvent.key);
             break;
         }

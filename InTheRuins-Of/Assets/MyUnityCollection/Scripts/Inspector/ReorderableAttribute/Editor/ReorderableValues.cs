@@ -495,7 +495,7 @@ namespace MUC.Inspector.Internal {
 
     private static readonly GUIStyle EyeDropperHorizontalLine = "EyeDropperHorizontalLine";
 
-    protected static readonly GUIStyle ContextMenuButtonStyle = "Icon.TrackOptions";
+    protected static readonly GUIStyle ContextMenuButtonStyle = "Button";
 
     protected GUIContent IconToolbarPlus {
       get => defaultBehaviours.iconToolbarPlus;
