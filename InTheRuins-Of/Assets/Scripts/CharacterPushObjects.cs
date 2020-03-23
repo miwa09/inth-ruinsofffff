@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+using MUC.Types.Extensions;
+
+
 [RequireComponent(typeof(Controller))]
 public class CharacterPushObjects : MonoBehaviour {
 

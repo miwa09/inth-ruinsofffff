@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+using MUC.Inspector;
+
+
 namespace CharacterComponentSystem {
   public class Death : MonoBehaviour {
 
@@ -15,7 +18,6 @@ namespace CharacterComponentSystem {
         if (value) onDeath.Invoke(gameObject);
         else onRevive.Invoke(gameObject);
         _dead = value;
-        print("nam");
       }
     }
 
@@ -41,7 +43,7 @@ namespace CharacterComponentSystem {
       if (!dead && hp <= 0) Kill();
     }
 
-    [MyBox.ButtonMethod()]
+    [Button]
     /// <summary> Kills the unit if alive. Health is set to 0 if it is not negative </summary>
     /// <returns> Whether or not the unit was killed. False if already dead </returns>
     public bool Kill() {
@@ -55,7 +57,7 @@ namespace CharacterComponentSystem {
       }
     }
 
-    [MyBox.ButtonMethod()]
+    [Button]
     /// <summary> Resurrects the unit if dead. Health is set to 1 if it is not positive </summary>
     /// <returns> Whether or not the unit was resurrected. False if already alive </returns>
     public bool Resurrect() {

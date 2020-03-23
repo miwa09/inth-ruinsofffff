@@ -1,0 +1,18 @@
+{
+    "name": "MUC",
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:c93719aabf7a8aa46a095f909cff918f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
