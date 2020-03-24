@@ -6,16 +6,16 @@ namespace CharacterSystem {
   using System.Collections;
   using System.Collections.Generic;
 
-
-  public class ValueModifier<T> {
+  [Serializable]
+  public abstract class ValueModifier<T> {
 
     public readonly Type type = typeof(T);
 
     public readonly string name;
-    public readonly Func<T, T> function;
+    public readonly Func<T, T, T> function;
 
     protected void Register() {
-      ValueModifierTracker.RegisterModifier(this as ValueModifier<dynamic>);
+      ValueModifierTracker.RegisterModifier(this);
     }
   }
 }
