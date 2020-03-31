@@ -4,9 +4,9 @@ using System.Collections;
 using System.Linq;
 using System;
 
-using MUC.Types;
+using Muc.Types;
 
-namespace MUC.Collections {
+namespace Muc.Collections {
 
   /// <summary>
   /// Represents a first-in, first-out fixed size list of items. 

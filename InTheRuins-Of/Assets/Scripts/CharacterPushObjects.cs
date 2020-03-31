@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-using MUC.Types.Extensions;
+using Muc.Types.Extensions;
 
 
 [RequireComponent(typeof(Controller))]

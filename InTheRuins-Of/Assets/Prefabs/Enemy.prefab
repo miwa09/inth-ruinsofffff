@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7904488657138519865}
   - component: {fileID: 6154612823512309238}
-  - component: {fileID: 5338520687074061302}
+  - component: {fileID: 1314072190}
   m_Layer: 11
   m_Name: HurtBox
   m_TagString: Untagged
@@ -46,7 +46,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5338520687074061302
+--- !u!114 &1314072190
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,15 +55,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1921165254371657191}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b5712c1d534e58408c45b22d0625d50, type: 3}
+  m_Script: {fileID: 11500000, guid: a78268e67eece594eaaa10333f127ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filterTag: 0
-  filteredTag: 
+  _tag: 
   enterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1730033707}
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
         m_MethodName: Damage
         m_Mode: 4
         m_Arguments:
@@ -92,11 +92,6 @@ GameObject:
   - component: {fileID: 6205416407377811456}
   - component: {fileID: 6205416407377811462}
   - component: {fileID: 6205416407377811457}
-  - component: {fileID: 1730033707}
-  - component: {fileID: 7734344093829765857}
-  - component: {fileID: 1730033708}
-  - component: {fileID: 1730033709}
-  - component: {fileID: 1730033710}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -134,6 +129,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -158,6 +154,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &6205416407377811462
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -188,126 +185,3 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1730033707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6205416407377811459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e52bbd7edc7594cbf79da81e057d69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 10
-  onChange:
-    m_PersistentCalls:
-      m_Calls: []
-  onDamage:
-    m_PersistentCalls:
-      m_Calls: []
-  onHeal:
-    m_PersistentCalls:
-      m_Calls: []
-  onSet:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &7734344093829765857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6205416407377811459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f79dcba26214c984581705296b496664, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dead: 0
-  hp: {fileID: 0}
-  restrictHealing: 1
-  onDeath:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6205416407377811456}
-        m_MethodName: set_material
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: 9f9db0eba08dcbd4b94c45930159b019,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onRevive:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6205416407377811456}
-        m_MethodName: set_material
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 2100000, guid: eb47c4f906060eb4f9229d8046649c2a,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Material, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1730033708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6205416407377811459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e7945e9678a6494cb3f92bee388c7d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  invulnerable: 0
-  hp: {fileID: 0}
-  onGainInvulnerability:
-    m_PersistentCalls:
-      m_Calls: []
-  onLoseInvulnerability:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1730033709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6205416407377811459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1cc42cf407abdd408a416709ce85595, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  duration: 0
-  highDamageOverride: 1
-  hp: {fileID: 0}
---- !u!114 &1730033710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6205416407377811459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb1cb7b3f49992c409e9349a3fea31c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stamina: 1
-  maximum: 1
-  regenPerSec: 1
-  regenDelay: 0.5

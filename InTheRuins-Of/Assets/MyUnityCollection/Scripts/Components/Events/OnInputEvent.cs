@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-using MUC.Inspector;
+using Muc.Inspector;
 
-namespace MUC.Components {
+namespace Muc.Components {
 
 
   /// <summary>
@@ -12,8 +12,6 @@ namespace MUC.Components {
   /// </summary>
   public class OnInputEvent : MonoBehaviour {
 
-
-    [Reorderable]
     public InputEvent[] inputEvents;
 
     private List<InputEvent> fixedEvents = new List<InputEvent>();
@@ -28,7 +26,7 @@ namespace MUC.Components {
 
     public enum InputType { Held, NotHeld, Down, Up, }
 
-    // Start is called before the fi rst frame update
+    // Start is called before the first frame update
     void Start() {
 
     }

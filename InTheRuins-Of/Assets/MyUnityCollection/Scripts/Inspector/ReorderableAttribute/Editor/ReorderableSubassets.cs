@@ -1,7 +1,7 @@
 
 
 #if UNITY_EDITOR
-namespace MUC.Inspector.Internal {
+namespace Muc.Inspector.Internal {
 
   using System;
   using System.Collections.Generic;

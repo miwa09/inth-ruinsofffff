@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using Unity.Mathematics;
-using MUC.Types.Extensions;
+using Muc.Types.Extensions;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 
-namespace MUC.Components {
+namespace Muc.Components {
 
   public class DisplayRect : MonoBehaviour {
     public Rect rect;

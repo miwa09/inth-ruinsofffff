@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using MUC.Components;
+using Muc.Components;
 
 
 namespace InteractionSystem {

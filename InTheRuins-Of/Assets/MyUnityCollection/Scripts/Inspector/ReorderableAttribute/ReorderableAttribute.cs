@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace MUC.Inspector {
+namespace Muc.Inspector {
 
   [AttributeUsage(AttributeTargets.Field)]
   public class ReorderableAttribute : PropertyAttribute {
