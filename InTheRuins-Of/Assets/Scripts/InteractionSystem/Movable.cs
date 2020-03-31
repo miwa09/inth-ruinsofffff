@@ -3,9 +3,9 @@ using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
 
-using MUC.Components;
-using MUC.Types;
-using MUC.Types.Extensions;
+using Muc.Components;
+using Muc.Types;
+using Muc.Types.Extensions;
 
 
 namespace InteractionSystem {

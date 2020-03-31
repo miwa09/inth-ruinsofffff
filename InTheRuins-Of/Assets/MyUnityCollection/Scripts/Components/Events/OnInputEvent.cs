@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-using MUC.Inspector;
+using Muc.Inspector;
 
-namespace MUC.Components {
+namespace Muc.Components {
 
 
   /// <summary>

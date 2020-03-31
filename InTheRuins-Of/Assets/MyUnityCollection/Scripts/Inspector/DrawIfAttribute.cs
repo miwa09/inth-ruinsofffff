@@ -2,7 +2,7 @@
 // Original: https://github.com/Deadcows/MyBox
 
 
-namespace MUC.Inspector {
+namespace Muc.Inspector {
 
   using System;
 
@@ -29,7 +29,7 @@ namespace MUC.Inspector {
 }
 
 
-namespace MUC.Inspector.Internal {
+namespace Muc.Inspector.Internal {
 
   using System;
   using System.Linq;
@@ -51,7 +51,7 @@ namespace MUC.Inspector.Internal {
 
 
 #if UNITY_EDITOR
-namespace MUC.Inspector.Internal {
+namespace Muc.Inspector.Internal {
 
   using System;
   using System.Linq;

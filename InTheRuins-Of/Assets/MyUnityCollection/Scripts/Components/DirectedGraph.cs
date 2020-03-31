@@ -6,11 +6,11 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-using MUC.Types;
-using MUC.Types.Extensions;
+using Muc.Types;
+using Muc.Types.Extensions;
 
 
-namespace MUC.Components {
+namespace Muc.Components {
 
   /// <summary>
   /// Cyclic Directed Graph. Useful for creating predefined path or networks

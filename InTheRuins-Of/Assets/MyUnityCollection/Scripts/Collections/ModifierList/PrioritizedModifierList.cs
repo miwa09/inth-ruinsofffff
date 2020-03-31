@@ -1,5 +1,5 @@
 ﻿
-namespace MUC.Collections {
+namespace Muc.Collections {
 
   using System;
   using System.Collections;
