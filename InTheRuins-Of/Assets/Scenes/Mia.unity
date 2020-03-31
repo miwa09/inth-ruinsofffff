@@ -305,6 +305,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8425218991896215697, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3d9d6697cc66b494a8835ff8270ec95a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -360,10 +365,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3001883033638415251, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2872408415419753440, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1620497549125229686, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 3d9d6697cc66b494a8835ff8270ec95a,
         type: 3}
       propertyPath: m_Name
       value: "vihulainen k\xE4vely"
+      objectReference: {fileID: 0}
+    - target: {fileID: -203991608966206696, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28599663191962416, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5341368822009116007, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5699570056019019558, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8048364558293210520, guid: 3d9d6697cc66b494a8835ff8270ec95a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d9d6697cc66b494a8835ff8270ec95a, type: 3}
