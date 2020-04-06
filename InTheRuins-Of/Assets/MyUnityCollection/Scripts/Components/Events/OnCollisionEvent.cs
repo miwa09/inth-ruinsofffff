@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 
-namespace MUC.Components {
+namespace Muc.Components {
 
   [RequireComponent(typeof(Collider))]
   public class OnCollisionEvent : MonoBehaviour {

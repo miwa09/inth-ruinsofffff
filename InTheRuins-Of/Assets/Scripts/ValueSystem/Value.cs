@@ -1,30 +1,45 @@
-﻿
 
-namespace CharacterSystem {
+namespace ValueSystem {
 
   using System;
+  using System.Linq;
   using System.Collections;
   using System.Collections.Generic;
-  using UnityEngine;
 
-  using MUC.Inspector;
+  public abstract class Value<T> : IEnumerable<Modifier<T>> {
 
+    public readonly ValueData vd;
+    private readonly List<Modifier<T>> modifiers = new List<Modifier<T>>();
+    private readonly List<Type> types;
 
-  public abstract class Value<T> : ScriptableObject {
+    public Value(ValueData vd) {
+      this.vd = vd;
+      types = vd.GetModifiers<T>();
+    }
 
-    public Type type = typeof(T);
+    public void AddModifier(Modifier<T> modifier) {
 
-    public new abstract string name { get; }
+      int pos = types.IndexOf(modifier.GetType());
 
-    public abstract List<ValueModifier<T>> modifiers { get; }
-
-    [Button]
-    public void AddCompatibleModifiers() {
-      foreach (var modifier in ValueModifierTracker.GetModifiers<T>()) {
-        if (!modifiers.Contains(modifier)) {
-          modifiers.Add(modifier);
+      for (int i = 0; i < modifiers.Count; i++) {
+        var other = modifiers[i];
+        if (types.IndexOf(other.GetType()) <= pos) {
+          modifiers.Insert(i, modifier);
+          return;
         }
       }
+      modifiers.Add(modifier);
+    }
+
+    public Modifier<T> FindModifier<TModifier>() {
+      return modifiers.Find(v => v.GetType() == typeof(TModifier));
+    }
+
+    IEnumerator<Modifier<T>> IEnumerable<Modifier<T>>.GetEnumerator() => modifiers.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => modifiers.GetEnumerator();
+
+    private int GetModifierPos(Modifier<T> modifier) {
+      return types.IndexOf(modifier.GetType());
     }
   }
 }
