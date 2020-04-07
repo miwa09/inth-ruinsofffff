@@ -317,10 +317,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 832856212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f73b6f6074f0c84f931a06fc6ea1d3c, type: 3}
+  m_Script: {fileID: 11500000, guid: b210ea2dc6b03a64a87c9b2a77ffc415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vd: {fileID: 11400000, guid: c463631836465ae4b85849b9c8302407, type: 2}
+  vd: {fileID: 11400000, guid: ef8ae669328b4c24cb7b25757a9b6e7d, type: 2}
+  _value: 850
+  max: Infinity
 --- !u!4 &832856214
 Transform:
   m_ObjectHideFlags: 0
@@ -1139,6 +1141,10 @@ PrefabInstance:
     - target: {fileID: 1743903104223250, guid: 2e62f5703e5f8d2488a5e1bc8433be41, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1743903104223250, guid: 2e62f5703e5f8d2488a5e1bc8433be41, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4448068258976056, guid: 2e62f5703e5f8d2488a5e1bc8433be41, type: 3}
       propertyPath: m_LocalPosition.x
