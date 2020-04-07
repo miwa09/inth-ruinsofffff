@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-using Muc.Types;
-using Muc.Types.Extensions;
-
-
+﻿
 namespace Muc.Components {
+
+  using System.Collections.Generic;
+
+  using Unity.Mathematics;
+  using UnityEngine;
+
+  using Muc.Types;
+
 
   /// <summary>
   /// Cyclic Directed Graph. Useful for creating predefined path or networks
@@ -32,8 +29,20 @@ namespace Muc.Components {
       nodes = new List<DirectedNode>() { node1, node2, node3 };
     }
   }
+}
 
 #if UNITY_EDITOR
+namespace Muc.Components.Editor {
+
+  using System.Collections.Generic;
+
+  using UnityEngine;
+  using UnityEditor;
+  using Unity.Mathematics;
+
+  using Muc.Types.Extensions;
+  using Muc.Types;
+
   /// <summary>
   /// Relaxed DirectedGraph editor
   /// </summary>
