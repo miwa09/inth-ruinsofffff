@@ -1,12 +1,10 @@
-﻿using UnityEngine;
-using Unity.Mathematics;
-using Muc.Types.Extensions;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-
+﻿
 namespace Muc.Components {
+
+  using UnityEngine;
+  using Unity.Mathematics;
+
+  using Muc.Types.Extensions;
 
   public class DisplayRect : MonoBehaviour {
     public Rect rect;
@@ -24,9 +22,17 @@ namespace Muc.Components {
       Gizmos.DrawCube(rect.center, rect.size);
     }
   }
-
+}
 
 #if UNITY_EDITOR
+namespace Muc.Components.Editor {
+
+  using UnityEngine;
+  using UnityEditor;
+  using Unity.Mathematics;
+
+  using Muc.Types.Extensions;
+
   [CustomEditor(typeof(DisplayRect), true)]
   public class DisplayRectEditor : Editor {
 
