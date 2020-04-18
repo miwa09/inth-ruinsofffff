@@ -32,7 +32,7 @@ namespace Muc.Components {
 
     void OnCollisionEnter(Collision col) {
       if (_tag != "" || col.gameObject.tag == _tag) {
-        stayEvent.Invoke(col);
+        enterEvent.Invoke(col);
       }
     }
     void OnCollisionExit(Collision col) {
@@ -42,7 +42,7 @@ namespace Muc.Components {
     }
     void OnCollisionStay(Collision col) {
       if (_tag != "" || col.gameObject.tag == _tag) {
-        stayEvent.Invoke(col);
+        exitEvent.Invoke(col);
       }
     }
   }
