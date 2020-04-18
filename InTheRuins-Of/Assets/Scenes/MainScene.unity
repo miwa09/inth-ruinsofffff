@@ -74291,9 +74291,7 @@ PlayableDirector:
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: -6356068558676037923, guid: 2e363f3a38696214e9198db1ff4804f6, type: 2}
-    value: {fileID: 1795773363}
+  m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1795773365
@@ -82090,12 +82088,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.03371289
+      value: 0.033712894
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.05911335
+      value: 0.059113353
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
@@ -82110,17 +82108,17 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -86.878
+      value: 359.9927
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -37.492
+      value: 359.9927
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 45.021
+      value: 359.8105
       objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: a92de84078dc5cc41af49a24d0acd4df,
         type: 3}
@@ -82168,7 +82166,11 @@ PlayableDirector:
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
-  m_SceneBindings: []
+  m_SceneBindings:
+  - key: {fileID: 2011288011342075911, guid: 0e3c37a176b792d4dabd52c83f20790e, type: 2}
+    value: {fileID: 1977606695}
+  - key: {fileID: -2082404027583311918, guid: 0e3c37a176b792d4dabd52c83f20790e, type: 2}
+    value: {fileID: 1977606695}
   m_ExposedReferences:
     m_References: []
 --- !u!43 &1987299866
