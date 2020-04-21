@@ -37,7 +37,7 @@ namespace Muc.Components {
 
     void OnTriggerEnter(Collider col) {
       if (!filterTag || col.tag == filteredTag) {
-        stayEvent.Invoke(col);
+        enterEvent.Invoke(col);
       }
     }
     void OnTriggerExit(Collider col) {
@@ -47,7 +47,7 @@ namespace Muc.Components {
     }
     void OnTriggerStay(Collider col) {
       if (!filterTag || col.tag == filteredTag) {
-        stayEvent.Invoke(col);
+        exitEvent.Invoke(col);
       }
     }
   }
