@@ -355,6 +355,6 @@ namespace Muc.Components.Editor {
       return Vector3.Cross(ray.direction, point - ray.origin).magnitude;
     }
   }
-#endif
 
 }
+#endif

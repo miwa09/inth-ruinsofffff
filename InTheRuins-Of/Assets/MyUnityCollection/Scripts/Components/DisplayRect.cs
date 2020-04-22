@@ -192,6 +192,6 @@ namespace Muc.Components.Editor {
       }
     }
   }
-#endif
 
 }
+#endif

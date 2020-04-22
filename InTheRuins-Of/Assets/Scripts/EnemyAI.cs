@@ -42,8 +42,6 @@ namespace global {
 
         agent.isStopped = false;
 
-        print($"State set to {value}");
-
         switch (value) {
           case State.idle:
             agent.isStopped = true;
@@ -65,7 +63,6 @@ namespace global {
           case State.dead:
             agent.isStopped = true;
             animator.SetTrigger("Death");
-            Destroy(this);
             break;
         }
 
@@ -114,7 +111,7 @@ namespace global {
           break;
 
         case State.attack:
-          if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")) {
+          if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")) {
             state = State.search;
           }
           break;
