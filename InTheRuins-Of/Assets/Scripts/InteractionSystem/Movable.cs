@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using Unity.Mathematics;
-
-using Muc.Components;
-using Muc.Types;
-using Muc.Types.Extensions;
-
-
+﻿
 namespace InteractionSystem {
+
+  using System.Linq;
+  using System.Collections.Generic;
+
+  using UnityEngine;
+  using Unity.Mathematics;
+
+  using Muc.Types;
+  using Muc.Types.Extensions;
+  using Muc.Components;
+
+
   [RequireComponent(typeof(Rigidbody))]
   [RequireComponent(typeof(Interactable))]
   public class Movable : MonoBehaviour {

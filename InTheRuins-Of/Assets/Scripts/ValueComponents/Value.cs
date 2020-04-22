@@ -75,12 +75,12 @@ namespace ValueComponents {
       }
     }
 
-    public virtual T AddToValue(T value) {
+    public virtual void AddToValue(T value) {
       var res = value;
       foreach (var modifier in modifiers) {
         res = modifier.Modify(res, (This)this);
       }
-      return value = AddRawToValue(res);
+      this._value = AddRawToValue(res);
     }
 
     protected abstract T AddRawToValue(T addition);

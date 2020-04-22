@@ -104,35 +104,35 @@ namespace Muc.Components.Editor {
         if (plane.Raycast(ray, out var distance)) {
 
           var target = ray.GetPoint(distance).xy();
-          var diff = target - prevTarget.Add(0.01f);
+          var dif = target - prevTarget.Add(0.01f);
 
           var size = math.min(t.rect.size.x, t.rect.size.y) / 10;
 
           if (Handles.Button(topLeft.AddX(size).AddY(-size), Quaternion.identity, size, size, Handles.RectangleHandleCap)) {
             Undo.RegisterCompleteObjectUndo(t, "Modify rect");
-            t.rect.xMin += diff.x;
-            t.rect.yMin += diff.y;
+            t.rect.xMin += dif.x;
+            t.rect.yMin += dif.y;
             Dirty();
           }
           if (Handles.Button(topRight.AddX(-size).AddY(-size), Quaternion.identity, size, size, Handles.RectangleHandleCap)) {
 
             Undo.RegisterCompleteObjectUndo(t, "Modify rect");
-            t.rect.xMax += diff.x;
-            t.rect.yMin += diff.y;
+            t.rect.xMax += dif.x;
+            t.rect.yMin += dif.y;
             Dirty();
 
           }
 
           if (Handles.Button(botLeft.AddX(size).AddY(size), Quaternion.identity, size, size, Handles.RectangleHandleCap)) {
             Undo.RegisterCompleteObjectUndo(t, "Modify rect");
-            t.rect.xMin += diff.x;
-            t.rect.yMax += diff.y;
+            t.rect.xMin += dif.x;
+            t.rect.yMax += dif.y;
             Dirty();
           }
           if (Handles.Button(botRight.AddX(-size).AddY(size), Quaternion.identity, size, size, Handles.RectangleHandleCap)) {
             Undo.RegisterCompleteObjectUndo(t, "Modify rect");
-            t.rect.xMax += diff.x;
-            t.rect.yMax += diff.y;
+            t.rect.xMax += dif.x;
+            t.rect.yMax += dif.y;
             Dirty();
           }
 

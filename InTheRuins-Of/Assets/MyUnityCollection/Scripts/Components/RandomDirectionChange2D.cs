@@ -43,9 +43,9 @@ namespace Muc.Components {
       }
       var fraction = (Time.time - lastRotationChange) / rotationInterval;
       var val = rotationCurve.Evaluate(fraction);
-      var diff = val - prevVal;
+      var dif = val - prevVal;
       prevVal = val;
-      var deltaRotation = rotation * diff;
+      var deltaRotation = rotation * dif;
       rb.velocity = Quaternion.Euler(0, 0, deltaRotation) * rb.velocity;
     }
   }
